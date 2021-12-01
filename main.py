@@ -1,8 +1,3 @@
-## L'objectif est de predire le nombre des passageres dans un aeroport international
-## le nombre des passagers est donner en unite de 1000
-## la base de donnee disponible est d'un intervale de janvier 1949 jusqu'a decembre 1960
-## avec 144 observations
-
 ## 1 - import necessary labraries :
 import torch
 import torch.nn as nn
@@ -15,10 +10,10 @@ from torch.autograd import Variable
 
 ## 2 - Load and preprocess the Data :
 # load data :
-dataset = pandas.read_csv('airline-passengers.csv', usecols=[1], engine='python') # remarque : au lieu d'apprendre t = mois, annee, on peut dire que t=0 correspond au janvier 1949, t=1 au feverier 1949..... 
+dataset = pandas.read_csv('airline-passengers.csv', usecols=[1], engine='python') 
 # la convetir en numpy array et de type float32
 dataset = np.array(dataset).astype(np.float32)
-# Noramalisation des donnees : parce que le nombre des passagers du premier mois est trop faible par rapport aux mois recents
+# Noramalisation des donnees : 
 scaler = MinMaxScaler(feature_range=(0, 1))
 dataset = scaler.fit_transform(dataset.reshape(-1, 1))
 # affichage de la taille des donnees : 
@@ -29,9 +24,6 @@ plt.show()
 
 
 ## 3 - Preparation des donnees :
-# Remarque : J'ai essaye en prenant qu'un valeur a l'instant (t-1) pour predire le nombre des passagers a l'instant (t)
-# Mais ceci donne des resultats faible
-# Je vais essayer de prendre les quatres donnees precedantes pour predire ce qui suuit:
 def sliding_Window(data, seq_length):
     x = []
     y = []
@@ -60,8 +52,6 @@ class LSTMModel(nn.Module):
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        # input_size = The number of expected features in the input x
-        # num_layers = 2 veut dire placer deux LSTM l'un apres l'autre
         self.lstm = nn.LSTM(input_size=self.input_size, hidden_size=self.hidden_size, num_layers=self.num_layers, batch_first=True)
         self.fc = nn.Linear(self.hidden_size, self.num_classes)
 
@@ -113,7 +103,7 @@ if __name__ == "__main__":
         # print(train_x.shape) = torch.Size([114, 4, 1])
         out = modele(train_x)
         loss = criterion(out, train_y)
-        loss.backward() # backward pour calculer le graduit
+        loss.backward()
         losses.append(loss.item())
         
         optimizer.step()
