@@ -13,7 +13,7 @@ Le modele utilise est constitue d'une couche LSTM suivie d'une couche fully conn
 Pytorch
 
 <h2> Faire tourner le projet </h2>
-* Installer les dependences : pip install requirements.txt
+* Installer les dependences : pip install requirements.txt <br>
 * Tapez : python main.py
 
 <h2> Courbe du Loss : </h2>
